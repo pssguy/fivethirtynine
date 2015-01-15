@@ -102,3 +102,40 @@ df %>%
   add_axis("x", title="Av Playing Time(+/- 15 minutes)") %>%
   add_axis("y", title="Average User rating")
 
+
+##B.1 Worst Games Ever ##
+
+# We'll need a couple more fields
+data$decade <-cut(data$year, breaks=c(1869,1879,1889,1899,1909,1919,1929,1939,1949,1959,1969,1979,1989,1999,2009,2019), labels=c("1870s","1880s","1890s","1900s","1910s","1920s","1930s","1940s","1950s","1960s","1970s","1980s","1990s","2000s","2010s"))
+data$century <- cut(data$year, breaks=c(-99999,1899,1999,2019),labels=c("- 19th C","20th C","21st C"))
+
+
+# I have added a century grouping. 
+# Roughly half of the games are 21stC 
+data %>%
+  filter(ratings>9)  %>% 
+  ggvis(~log10(ratings),~av, key := ~id) %>%
+  layer_points(size:=10,fill=~century, opacity:=0.8) %>%
+  add_tooltip(tt_a, "hover") %>%
+  add_axis("x", title="Number of ratings (log scale)")
+%>%  
+  add_axis("y", title="Average rating")
+
+
+##B.2 Worst Games by Decade ##
+
+
+df <-data.frame(data %>%
+                  filter(!is.na(decade)&ratings>99&year>1909) %>%
+                  arrange(av,desc(year)) %>% # change to arrange(av,desc(year)) for best
+                  group_by(decade)  %>% 
+                  slice(1)  %>%
+                  select(decade,game=name,ratings,av=round(av,2)))
+
+df %>%
+  arrange(desc(decade)) %>%
+  filter(decade>"1900s")
+
+
+## There is plenty more mineable from the dataset and I
+## hope to return to it at some stage
