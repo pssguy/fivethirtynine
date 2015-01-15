@@ -6,3 +6,5 @@ Recreation and extension of some [fivethirtyeight](http://fivethirtyeight.com/) 
 
 Whenever there is one that particularly takes my fancy and does not provide full details, I will be using
 this repository for analysis
+
+* [Board Games](https://github.com/pssguy/fivethirtynine/blob/master/boardGames/code.R)
